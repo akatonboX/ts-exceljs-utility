@@ -1,0 +1,12 @@
+{
+  "name": "ts-exceljs-utility",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/akatonboX/ts-exceljs-utility.git",
+  "author": "akatonboX <70128369+akatonboX@users.noreply.github.com>",
+  "private": true,
+  "license": "MIT",
+  "workspaces": [
+    "packages/*"
+  ]
+}

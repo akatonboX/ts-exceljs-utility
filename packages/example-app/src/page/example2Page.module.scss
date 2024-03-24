@@ -1,0 +1,15 @@
+.root{
+  display: flex;
+  flex-direction: column;
+
+  > div{
+    display: flex;
+    flex-direction: column;
+    > :last-child{
+      display: flex;
+      > * {
+        margin: 5px;
+      }
+    }
+  }
+}
