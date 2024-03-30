@@ -1,4 +1,7 @@
 export {
+  CellAddress
+} from "./core";
+export {
   CellRange,
   getCellRange,
 } from "./range";

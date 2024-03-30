@@ -1,176 +1,99 @@
-# ts-react-listview
-* ListView component for react.
-* Supports fixed row headers, column headers, and changing column widths.
-
-
+# ts-exceljs-utility
+* This is a package that gathers useful functionalities for using ExcelJS (https://www.npmjs.com/package/exceljs).
+1. Mutual conversion between "A1:B1" and [row, col].
+1. Inserting images into specified cell ranges without changing the aspect ratio of the images.
+1. Allowing downloading of workbooks.
 # Note
-* The client is assumed to be Windows.
-* Confirmed to work with chrome.
-* -webkit-scrollbar is used for css.
+* Tested on Chrome from a React application created with CRA.
+# Note
+* CRAで作成したReactアプリケーションから、chromeで動作確認しています。
+
 # Installation
 ```shell
-yarn install ts-react-listview
+yarn add ts-exceljs-utility
 ```
 
 # release
-* [2024/3/17]v1.0.0 released 
+* [2024/3/24]v1.0.0 released 
 
-# simple example
-<a href="https://app.archive-gp.com/ts-react-listview/example1">demo</a>
-
+# CellAddress
+* An interface representing a cell or a range of cells. It allows the following representations:
+1. Representation by string. ```"A1"```, ```"A1:B2"```
+1. Representation of a single cell by row and column indices. ```{top: 1, left: 1} //="A1"```
+1. Representation of a cell range by indices of the top-left and bottom-right cells. ```{top: 1, left: 1, bottom: 2, right: 2} //="A1:B2"```
+* Defined as follows:
 ``` typescript
-import React from 'react';
-import { PageLayout } from '../layout/pageLayout';
-import styles from "./example1Page.module.scss";
-import { ListView, ListViewItem, ListViewRow } from 'ts-react-listview';
-export function Example1Page(
-  props: {
+export type CellAddress = 
+  string 
+  | {
+    top: number;
+    left: number;
+  } 
+  | {   
+    top: number;
+    left: number;
+    bottom: number;
+    right: number;
   }
-) 
-{
-  const data : {a: string, b: string, c: string}[] = new Array(100).fill(1).map((item, index) => {
-    return {
-      a: `A${index}`,
-      b: `B${index}`,
-      c: `C${index}`,
-    };
-  });
-  return (
-    <PageLayout title="Example1">
-      <div>
-        <ListView headers={[
-          {
-            name: "a",
-            label: <div className={styles.listViewCloumn}>A</div>,
-            defaultWidth: 70,
-          },
-          {
-            name: "b",
-            label: <div className={styles.listViewCloumn}>B</div>,
-            defaultWidth: 100,
-          },
-          {
-            name: "c",
-            label: <div className={styles.listViewCloumn}>C</div>,
-            defaultWidth: 120,
-          },
-        ]}>
-          {(data ?? []).map((item, index) => (
-            <ListViewRow key={index} >
-              <ListViewItem name="a">
-                <div className={styles.listViewCell}>{item.a}</div>
-              </ListViewItem>
-              <ListViewItem name="b">
-                <div className={styles.listViewCell}>{item.b}</div>
-              </ListViewItem>
-              <ListViewItem name="c">
-                <div className={styles.listViewCell}>{item.c}</div>
-              </ListViewItem>
-            </ListViewRow>
-          ))}
-        </ListView>
-      </div>
-    </PageLayout>
-  );
-}
 ```
 
-# Show row headers
-<a href="https://app.archive-gp.com/ts-react-listview/example2">demo</a>
-* Set ```hasRowHeader={true}``` to display row headers.
-* If you display row headers, you need to specify the row width and height. ```rowHeaderWidth={300} rowHeight={100} ```
-
-``` typescript
-import React from 'react';
-import { PageLayout } from '../layout/pageLayout';
-import styles from "./example2Page.module.scss";
-import { ListView, ListViewItem, ListViewRow } from 'ts-react-listview';
-export function Example2Page(
-  props: {
-  }
-) 
-{
-  const data : {a: string, b: string, c: string}[] = new Array(100).fill(1).map((item, index) => {
-    return {
-      a: `A${index}`,
-      b: `B${index}`,
-      c: `C${index}`,
-    };
-  });
-  return (
-    <PageLayout title="Example1">
-      <div>
-        <ListView hasRowHeader={true} rowHeaderWidth={300} rowHeight={100}headers={[
-          {
-            name: "a",
-            label: <div className={styles.listViewCloumn}>A</div>,
-            defaultWidth: 70,
-          },
-          {
-            name: "b",
-            label: <div className={styles.listViewCloumn}>B</div>,
-            defaultWidth: 100,
-          },
-          {
-            name: "c",
-            label: <div className={styles.listViewCloumn}>C</div>,
-            defaultWidth: 120,
-          },
-        ]}>
-          {(data ?? []).map((item, index) => (
-            <ListViewRow key={index}  header={<div style={{height: "100%", display: "flex", justifyContent: "center", alignItems: "center"}}>{index}</div>} >
-              <ListViewItem name="a">
-                <div className={styles.listViewCell}>{item.a}</div>
-              </ListViewItem>
-              <ListViewItem name="b">
-                <div className={styles.listViewCell}>{item.b}</div>
-              </ListViewItem>
-              <ListViewItem name="c">
-                <div className={styles.listViewCell}>{item.c}</div>
-              </ListViewItem>
-            </ListViewRow>
-          ))}
-        </ListView>
-      </div>
-    </PageLayout>
-  );
-}
-```
-
-# Change borders
-<a href="https://app.archive-gp.com/ts-react-listview/example3">demo</a>
-* You can specify the border style, such as ```horizontalLineStyle="1px solid black" verticvalLineStyle="1px solid black"```.
-
-# What happens when column width changes
-<a href="https://app.archive-gp.com/ts-react-listview/example3">demo</a>
-
-* Use the ```onResizeColumn``` property.
-* Below is an example of retaining the changed column width in local storage and applying it on reload.
+# Mutual conversion between cell or cell range's string representation and index representation
+<a href="https://app.archive-gp.com/ts-exceljs-utility/example1">demo</a>
+* Use the method below.
 ```typescript
- <ListView horizontalLineStyle="1px solid black" verticvalLineStyle="1px solid black" onResizeColumn={(name, width) => {
-          localStorage.setItem(`Example3Page_${name}`, String(width));
-        }} headers={[
-          {
-            name: "a",
-            label: <div className={styles.listViewCloumn}>A</div>,
-            defaultWidth: Number(localStorage.getItem(`Example3Page_a`) ?? 100),
-          },
-          {
-            name: "b",
-            label: <div className={styles.listViewCloumn}>B</div>,
-            defaultWidth: Number(localStorage.getItem(`Example3Page_b`) ?? 100),
-          },
-          {
-            name: "c",
-            label: <div className={styles.listViewCloumn}>C</div>,
-            defaultWidth: Number(localStorage.getItem(`Example3Page_c`) ?? 100),
-          },
-        ]}>
-```
-# Prohibit changing column size
-<a href="https://app.archive-gp.com/ts-react-listview/example4">demo</a>
-* By setting ```resizeColumnEnabled={false}```, you will not be able to change the column width.
+function getCellRange(address: CellAddress): CellRange
 
-# Size
-<a href="https://app.archive-gp.com/ts-react-listview/example5" target=">demo</a>
-* The ListView will be the size of the element you place it on.
+type CellRange = {
+  rangeStr: string;//String representation like "A1:B2"
+  top: number;//Index of the top-left cell starting from 1 for rows.
+  left: number;//Index of the top-left cell starting from 1 for columns.
+  bottom: number;//Index of the bottom-right cell starting from 1 for rows.
+  right: number;//Index of the bottom-right cell starting from 1 for columns.
+}
+```
+* Usage:
+``` typescript
+import { getCellRange } from "ts-exceljs-utility";
+
+const range1 = getCellRange("A1:B2");
+// range1 = {rangeStr: "A1:B2", top: 1, left: 1, bottom: 2, right: 2}
+
+const range2 = getCellRange({top: 1, left: 1});
+// range2 = {rangeStr: "A1:A1", top: 1, left: 1, bottom: 1, right: 1}
+
+const range3 = getCellRange({top: 1, left: 1, bottom: 2, right: 2});
+// range3 = {rangeStr: "A1:B2", top: 1, left: 1, bottom: 2, right: 2}
+```
+
+# Inserting images into specified cell ranges without changing the aspect ratio
+<a href="https://app.archive-gp.com/ts-exceljs-utility/example2">demo</a>
+
+## ```createAddImageParam```method
+* Constructs arguments for ExcelJS's ```workbook.addImage``` from a URL (string) or Blob.
+## ```addImageToCell```method
+* Inserts an image from a URL (string) or Blob.
+* Allows specifying the destination cell or cell range with ```CellAddress```.
+* Inserts the image without changing its aspect ratio, enlarging or reducing it to fit, with a specified size.
+* Requires specifying the image size.
+* Adds a margin of 2px on all sides.
+
+```typescript
+import { createAddImageParam, addImageToCell} from "ts-exceljs-utility";
+
+//■Create workbook and worksheet
+const book = new ExcelJS.Workbook();
+const sheet = book.addWorksheet("sample");
+
+//■Explicitly set width and height for the rows and columns where images will be inserted
+for(let i = 1; i <= 100; i++){
+  sheet.getRow(i).height = 13.5;
+  sheet.getColumn(i).width = 8.38;
+}
+
+//■Insert image into workbook
+const imageId = book.addImage(await createAddImageParam(horizonImage));
+
+//■Insert image into worksheet
+//Insert an image with a size of 712x357 into "B1:K10".
+addImageToCell(sheet, imageId, 712, 357, "B1:K10");
+```

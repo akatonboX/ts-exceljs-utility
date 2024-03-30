@@ -2,7 +2,7 @@ import React from 'react';
 import ExcelJS from "exceljs";
 import { PageLayout } from '../layout/pageLayout';
 import styles from "./example1Page.module.scss";
-import ExcelJSUtility from "ts-exceljs-utility";
+import { CellRange, getCellRange } from "ts-exceljs-utility";
 
 export function Example1Page(
   props: {
@@ -10,21 +10,21 @@ export function Example1Page(
 ) 
 {
   const [input1, setInput1] = React.useState("A1:B2");
-  const [result1, setResult1] = React.useState<ExcelJSUtility.CellRange | undefined>(undefined);
+  const [result1, setResult1] = React.useState<CellRange | undefined>(undefined);
   const [input2Top, setInput2Top] = React.useState("1");
   const [input2Left, setInput2Left] = React.useState("1");
-  const [result2, setResult2] = React.useState<ExcelJSUtility.CellRange | undefined>(undefined);
+  const [result2, setResult2] = React.useState<CellRange | undefined>(undefined);
   const [input3Top, setInput3Top] = React.useState("1");
   const [input3Left, setInput3Left] = React.useState("1");
   const [input3Bottom, setInput3Bottom] = React.useState("1");
   const [input3Right, setInput3Right] = React.useState("1");
-  const [result3, setResult3] = React.useState<ExcelJSUtility.CellRange | undefined>(undefined);
+  const [result3, setResult3] = React.useState<CellRange | undefined>(undefined);
   return (
     <PageLayout title="Example1">
       <div className={styles.root}>
         <input onChange={e => {setInput1(e.target.value);}} value={input1} />
         <button onClick={e => {
-          const range = ExcelJSUtility.getCellRange(input1);
+          const range = getCellRange(input1);
           setResult1(range);
         }}>getCellRange</button>
         {"->"}
@@ -34,7 +34,7 @@ export function Example1Page(
         top:<input onChange={e => {setInput2Top(e.target.value);}} value={input2Top} />
         left:<input onChange={e => {setInput2Left(e.target.value);}} value={input2Left} />
         <button onClick={e => {
-          const range = ExcelJSUtility.getCellRange({
+          const range = getCellRange({
             top: Number(input2Top), 
             left: Number(input2Left)
           });
@@ -49,7 +49,7 @@ export function Example1Page(
         bottom:<input onChange={e => {setInput3Bottom(e.target.value);}} value={input3Bottom} />
         left:<input onChange={e => {setInput3Right(e.target.value);}} value={input3Right} />
         <button onClick={e => {
-          const range = ExcelJSUtility.getCellRange({
+          const range = getCellRange({
             top: Number(input3Top), 
             left: Number(input3Left),
             bottom: Number(input3Bottom), 
