@@ -13,7 +13,8 @@ yarn add ts-exceljs-utility
 ```
 
 # release
-* [2024/3/24]v1.0.0 released 
+* [2024/3/31]v1.0.1 released.
+* [2024/3/24]v1.0.0 released.
 
 # CellAddress
 * セル、またはセルの範囲を表現するインターフェースです。下記の表現を許容します。
@@ -97,3 +98,57 @@ const imageId = book.addImage(await createAddImageParam(horizonImage));
 addImageToCell(sheet, imageId, 712, 357, "B1:K10");
 
 ```
+
+# xlsxをassetとして利用する[v1.0.1]
+<a href="https://app.archive-gp.com/ts-exceljs-utility/example3">demo</a>
+* xlsxをpng画像などのように、assetとして管理し、workbookにロードする機能を提供します。
+* これは、CRAで作成されたReactアプリケーションを前提とします。
+
+## cracoの導入と設定
+* xlsxをassetとして利用するためには、craco(https://www.npmjs.com/package/@craco/craco)の導入が必要です。
+```javascript
+[craco.config.js]
+module.exports = {
+  webpack: {
+    configure: (webpackConfig, { env, paths }) => {
+      webpackConfig.module.rules.push({
+        test: /\.xlsx$/,
+        type: 'asset',
+        parser: {
+          dataUrlCondition: {
+            maxSize: 0,
+          },
+        },
+      });
+      return webpackConfig;
+    },
+  },
+};
+```
+## xlsx.d.tsを用意する
+```javascript
+[xlsx.d.ts]
+declare module '*.xlsx' {
+  const content: string; 
+  export default content;
+}
+```
+
+## assetとして、```src```ディレクトリにxlxsを格納
+* 例えば、```src/assets/resource.xlxs```を格納します。
+
+## assetをworkbookにロードする
+* ```import assetXlsx from "../assets/example.xlsx";```でURLを取得し、```loadWorkbook```でworkbookを得ることができます。
+* 存在しないURLや、ダウンロードされたデータをwokrbookが読めなかった場合、```loadWorkbook```の戻り値はundefiendになります。
+```typescript
+import assetXlsx from "../assets/example.xlsx";
+.
+.
+.
+const workbook = await loadWorkbook(assetXlsx);
+if(workbook != null){
+  downloadWorkbook(workbook, "example.xlsx");
+}
+```
+
+

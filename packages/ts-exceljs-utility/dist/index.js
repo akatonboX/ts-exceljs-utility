@@ -1,5 +1,7 @@
 'use strict';
 
+var ExcelJS = require('exceljs');
+
 /**
  * CellAddressが文字列表現かどうかを調べる
  * @param address
@@ -630,6 +632,30 @@ function addImageToCell(worksheet, imageId, imageWidth, imageHeight, targetAddre
 }
 
 /**
+ * URLからxlsxをダウンロードしてworkbookに読み込みます。
+ * @param url
+ * @returns
+ */
+function loadWorkbook(url) {
+    return __awaiter(this, void 0, void 0, function* () {
+        //■指定されたURLから、ダウンロード
+        const response = yield fetch(url);
+        if (!response.ok) {
+            return undefined;
+        }
+        //■workbookに読み来い
+        const workbook = new ExcelJS.Workbook();
+        try {
+            yield workbook.xlsx.load(yield response.arrayBuffer());
+        }
+        catch (e) {
+            console.warn("Workbook.xlsx.load method failed. ", e);
+            return undefined;
+        }
+        return workbook;
+    });
+}
+/**
  * ExcelJSのworkbookをダウンロードする。※２回目以降の実行では、chromeにおいて、「このサイトで複数ファイルの自動ダウンロードが試行されました」という警告と許可を求めるダイアログが表示される。
  * @param workbook ダウンロードさせるworkbook
  * @param fileName ダウンロードするファイル名
@@ -657,4 +683,5 @@ exports.addImageToCell = addImageToCell;
 exports.createAddImageParam = createAddImageParam;
 exports.downloadWorkbook = downloadWorkbook;
 exports.getCellRange = getCellRange;
+exports.loadWorkbook = loadWorkbook;
 //# sourceMappingURL=index.js.map

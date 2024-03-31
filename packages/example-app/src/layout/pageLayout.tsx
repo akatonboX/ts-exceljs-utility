@@ -18,6 +18,7 @@ export const PageLayout = (
         <div>{/*ヘッダ-*/}
           <button onClick={e =>{navigate("/example1")}}>example1</button>
           <button onClick={e =>{navigate("/example2")}}>example2</button>
+          <button onClick={e =>{navigate("/example3")}}>example3</button>
         </div>
         <div>{/*コンテンツ*/}
           

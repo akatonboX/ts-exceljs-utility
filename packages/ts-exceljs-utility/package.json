@@ -1,6 +1,6 @@
 {
   "name": "ts-exceljs-utility",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "utility for ExcelJS",
   "main": "dist/index.js",
   "module": "dist/index.es.js",

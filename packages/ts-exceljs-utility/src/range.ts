@@ -1,5 +1,4 @@
-import ExcelJS, { Anchor, ValueType } from "exceljs";
-import lodash from "lodash";
+import ExcelJS from "exceljs";
 import { CellAddress, CellAddressRange, isCellAddressOne, isCellAddressRange, isCellAddressString } from "./core";
 
 

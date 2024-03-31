@@ -6,7 +6,7 @@
 # Note
 * Tested on Chrome from a React application created with CRA.
 # Note
-* CRAで作成したReactアプリケーションから、chromeで動作確認しています。
+* Tested on Chrome from a React application created with CRA.
 
 # Installation
 ```shell
@@ -14,7 +14,8 @@ yarn add ts-exceljs-utility
 ```
 
 # release
-* [2024/3/24]v1.0.0 released 
+* [2024/3/31]v1.0.1 released.
+* [2024/3/24]v1.0.0 released.
 
 # CellAddress
 * An interface representing a cell or a range of cells. It allows the following representations:
@@ -97,3 +98,56 @@ const imageId = book.addImage(await createAddImageParam(horizonImage));
 //Insert an image with a size of 712x357 into "B1:K10".
 addImageToCell(sheet, imageId, 712, 357, "B1:K10");
 ```
+
+# Using xlsx as an Asset[v1.0.1]
+<a href="https://app.archive-gp.com/ts-exceljs-utility/example3">demo</a>
+* Provides functionality to manage xlsx files as assets, similar to PNG images, and load them into workbooks.
+* Assumes a React application created with CRA.
+
+## Installing and Configuring Craco
+* To use xlsx as an asset, you need to install Craco (https://www.npmjs.com/package/@craco/craco).
+```javascript
+[craco.config.js]
+module.exports = {
+  webpack: {
+    configure: (webpackConfig, { env, paths }) => {
+      webpackConfig.module.rules.push({
+        test: /\.xlsx$/,
+        type: 'asset',
+        parser: {
+          dataUrlCondition: {
+            maxSize: 0,
+          },
+        },
+      });
+      return webpackConfig;
+    },
+  },
+};
+```
+## Prepare xlsx.d.ts
+```javascript
+[xlsx.d.ts]
+declare module '*.xlsx' {
+  const content: string; 
+  export default content;
+}
+```
+
+## Store xlsx as an Asset in the ```src``` Directory
+* Store, for example, ```src/assets/resource.xlxs```.
+
+## Load Asset into Workbook
+* Obtain the URL with ```import assetXlsx from "../assets/example.xlsx";``` and get the workbook using ```loadWorkbook```.
+If the URL does not exist or the workbook fails to read the downloaded data, the return value of ```loadWorkbook``` will be undefined.
+```typescript
+import assetXlsx from "../assets/example.xlsx";
+.
+.
+.
+const workbook = await loadWorkbook(assetXlsx);
+if(workbook != null){
+  downloadWorkbook(workbook, "example.xlsx");
+}
+```
+

@@ -10,4 +10,7 @@ export {
   addImageToCell
 } from "./addImage";
 
-export { downloadWorkbook } from "./download";;
+export { 
+  loadWorkbook,
+  downloadWorkbook 
+} from "./io";;
