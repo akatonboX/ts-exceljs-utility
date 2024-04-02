@@ -7,7 +7,6 @@ export function NotFoundPage(
   }
 ) 
 {
-  console.log("★")
   return (
     <PageLayout title="not found">
       <div>page not found.</div>

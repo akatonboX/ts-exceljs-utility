@@ -126,7 +126,7 @@ module.exports = {
 };
 ```
 ## xlsx.d.tsを用意する
-```javascript
+```typescript
 [xlsx.d.ts]
 declare module '*.xlsx' {
   const content: string; 
@@ -151,4 +151,26 @@ if(workbook != null){
 }
 ```
 
+# colBreaks(列方向の改行)を挿入する。[v1.0.2]
+<a href="https://app.archive-gp.com/ts-exceljs-utility/example4">demo</a>
+* ```addColBreak(worksheet: ExcelJS.Worksheet, colIndex: number): void```を使用して、worksheetにcolBreak(列方向の改行)を追加します。
+* ```colIndex```は、0から始まる列の位置です。
+* ```downloadWorkbook```メソッド、もしくは```writeWithColBreaks```メソッドで、colBreaksを反映したxlsxファイルを取得できます。
+```javascript
+  //■リソースからworkbookをロード
+  const workbook = await loadWorkbook(assetXlsx);
+  if(workbook == null)return;
 
+  //■入力から改行する列の配列に変換([5,10,15])
+  const breaks = input.split(",").map(item => item.trim()).filter(item => item.length > 0).map(item => Number(item)).filter(item => !isNaN(item));
+
+  //■一つ目のシートに列方向の改行を追加
+  const sheet = workbook.worksheets[0];
+  breaks.forEach(colBreak => {
+    addColBreak(sheet, colBreak);
+  });
+
+  //■ダウンロードさせる
+  downloadWorkbook(workbook, "example.xlsx");
+  //const blob = await writeWithColBreaks(workbook);
+```

@@ -126,7 +126,7 @@ module.exports = {
 };
 ```
 ## Prepare xlsx.d.ts
-```javascript
+```typescript
 [xlsx.d.ts]
 declare module '*.xlsx' {
   const content: string; 
@@ -151,3 +151,27 @@ if(workbook != null){
 }
 ```
 
+# Inserting colBreaks[v1.0.2]
+<a href="https://app.archive-gp.com/ts-exceljs-utility/example4">demo</a>
+* Use ```addColBreak(worksheet: ExcelJS.Worksheet, colIndex: number): void``` to add colBreaks (line breaks in columns) to the worksheet.
+* ```colIndex``` represents the position of the column starting from 0.
+* You can obtain an xlsx file that reflects colBreaks using the ``downloadWorkbook`` method or the ``writeWithColBreaks`` method.
+```typescript
+   //■Load workbook from resources
+  const workbook = await loadWorkbook(assetXlsx);
+  if(workbook == null) return;
+
+  //■Convert input to an array of columns to break ([5,10,15])
+  const breaks = input.split(",").map(item => item.trim()).filter(item => item.length > 0).map(item => Number(item)).filter(item => !isNaN(item));
+
+  //■Add column breaks to the first sheet
+  const sheet = workbook.worksheets[0];
+  breaks.forEach(colBreak => {
+    addColBreak(sheet, colBreak);
+  });
+
+  //■Trigger download
+  downloadWorkbook(workbook, "example.xlsx");
+  //const blob = await writeWithColBreaks(workbook);
+
+```

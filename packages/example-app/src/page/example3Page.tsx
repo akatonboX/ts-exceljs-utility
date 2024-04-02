@@ -2,7 +2,7 @@ import React from 'react';
 import ExcelJS from "exceljs";
 import { PageLayout } from '../layout/pageLayout';
 import styles from "./example3Page.module.scss";
-import { downloadWorkbook, loadWorkbook } from 'ts-exceljs-utility';
+import { downloadWorkbook,  loadWorkbook } from 'ts-exceljs-utility';
 import assetXlsx from "../assets/example.xlsx";
 
 

@@ -1,4 +1,5 @@
 import ExcelJS from "exceljs";
+import { writeWithColBreaks } from "./colBreaks";
 /**
  * URLからxlsxをダウンロードしてworkbookに読み込みます。
  * @param url 
@@ -29,10 +30,7 @@ export async function loadWorkbook(url: string): Promise<ExcelJS.Workbook | unde
  * @param fileName ダウンロードするファイル名
  */
 export async function downloadWorkbook(workbook: ExcelJS.Workbook, fileName: string){
-  const buffer = await workbook.xlsx.writeBuffer();
-  const blob = new Blob([buffer], {
-    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-  });
+  const blob = await writeWithColBreaks(workbook);
   const url = window.URL.createObjectURL(blob);
   try{
     const anchor = document.createElement('a');

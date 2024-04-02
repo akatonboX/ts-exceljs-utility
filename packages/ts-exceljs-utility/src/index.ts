@@ -14,3 +14,10 @@ export {
   loadWorkbook,
   downloadWorkbook 
 } from "./io";;
+
+export {
+  getColBreaks,
+  setColBreaks,
+  addColBreak,
+  writeWithColBreaks,
+} from "./colBreaks"

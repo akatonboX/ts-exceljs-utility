@@ -1,6 +1,6 @@
 {
   "name": "ts-exceljs-utility",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "utility for ExcelJS",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -26,12 +26,13 @@
     "image",
     "png",
     "jpeg",
-    "fit"
+    "fit",
+    "colbreaks"
   ],
   "license": "MIT",
   "peerDependencies": {
-    "typescript": ">=3.7.0",
-    "exceljs": "^4.4.0"
+    "exceljs": "^4.4.0",
+    "typescript": ">=3.7.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.4",
@@ -52,6 +53,7 @@
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-delete": "^2.0.0",
     "rollup-plugin-generate-package-json": "^3.2.0",
+    "rollup-plugin-node-polyfills": "^0.2.1",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "size-limit": "^9.0.0",
     "typescript": "^5.2.2"
